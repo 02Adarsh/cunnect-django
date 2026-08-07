@@ -1,0 +1,24 @@
+# Secrets
+.env
+.env.*
+
+# Local database and uploads
+db.sqlite3
+media/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+
+# Editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
