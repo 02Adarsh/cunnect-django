@@ -101,7 +101,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 pytk==0.0.2.1
 pytz==2025.2
-pywin32==310
+
 pyzmq==26.4.0
 qrcode==8.2
 redis==8.0.1
