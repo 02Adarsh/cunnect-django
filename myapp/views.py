@@ -1,6 +1,7 @@
 import random
 import string
 import time
+import logging
 
 from email.mime.image import MIMEImage
 from pathlib import Path
@@ -40,6 +41,9 @@ from .models import (
     SupportRequest,
     PrintOrder,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 # ====================== OTP EMAIL ======================
@@ -260,6 +264,13 @@ def register(request):
             return redirect("otp_verify")
 
         except Exception:
+            # Safe Render diagnostic: logs no OTP, recipient email, or password.
+            logger.exception(
+                "CUnnect OTP registration email failed. "
+                "smtp_user_configured=%s smtp_password_configured=%s",
+                bool(settings.EMAIL_HOST_USER),
+                bool(settings.EMAIL_HOST_PASSWORD),
+            )
             messages.error(request, "Error sending email. Please try again.")
 
     return render(request, "register.html")
@@ -334,6 +345,13 @@ def resend_otp(request):
         messages.success(request, "New OTP has been sent.")
 
     except Exception:
+        # Safe Render diagnostic: logs no OTP, recipient email, or password.
+        logger.exception(
+            "CUnnect OTP resend email failed. "
+            "smtp_user_configured=%s smtp_password_configured=%s",
+            bool(settings.EMAIL_HOST_USER),
+            bool(settings.EMAIL_HOST_PASSWORD),
+        )
         messages.error(request, "Failed to resend OTP.")
 
     return redirect("otp_verify")
