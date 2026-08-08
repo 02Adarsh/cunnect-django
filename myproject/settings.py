@@ -159,3 +159,19 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "").strip()
+
+CUNNECT_PUBLIC_URL = os.environ.get(
+    "CUNNECT_PUBLIC_URL",
+    "",
+).rstrip("/")
+
+# On Render, BREVO_API_KEY exists, so Django sends email through
+# Brevo HTTPS API instead of Gmail SMTP.
+if BREVO_API_KEY:
+    EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+
+    ANYMAIL = {
+        "BREVO_API_KEY": BREVO_API_KEY,
+    }
