@@ -4,6 +4,7 @@ Secrets and SMTP credentials are read from the root .env file.
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -174,4 +175,25 @@ if BREVO_API_KEY:
 
     ANYMAIL = {
         "BREVO_API_KEY": BREVO_API_KEY,
+    }
+
+# ============================================================
+# Supabase PostgreSQL for Render deployment
+# Local computer keeps using db.sqlite3 when DATABASE_URL is absent.
+# ============================================================
+
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+
+if DATABASE_URL:
+    supabase_database = dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+
+    supabase_database.setdefault("OPTIONS", {})
+    supabase_database["OPTIONS"]["sslmode"] = "require"
+
+    DATABASES = {
+        "default": supabase_database,
     }
