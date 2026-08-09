@@ -179,7 +179,7 @@ if BREVO_API_KEY:
 
 # ============================================================
 # Supabase PostgreSQL for Render deployment
-# Local computer keeps using db.sqlite3 when DATABASE_URL is absent.
+# Transaction Pooler compatible configuration
 # ============================================================
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
@@ -187,12 +187,16 @@ DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 if DATABASE_URL:
     supabase_database = dj_database_url.parse(
         DATABASE_URL,
-        conn_max_age=600,
+        # Do not hold persistent connections on Supabase Free.
+        conn_max_age=0,
         conn_health_checks=True,
     )
 
     supabase_database.setdefault("OPTIONS", {})
     supabase_database["OPTIONS"]["sslmode"] = "require"
+
+    # Transaction pooler cannot keep server-side cursors between queries.
+    supabase_database["DISABLE_SERVER_SIDE_CURSORS"] = True
 
     DATABASES = {
         "default": supabase_database,
