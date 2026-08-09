@@ -122,7 +122,7 @@ def send_cunnect_otp_email(recipient, otp, full_name="", user_id="", is_resend=F
     email = EmailMultiAlternatives(
         subject=subject,
         body=plain_message,
-        from_email=f"CUnnect Support <{settings.EMAIL_HOST_USER}>",
+        from_email=f"CUnnect<{settings.EMAIL_HOST_USER}>",
         to=[recipient],
     )
     email.attach_alternative(html_message, "text/html")

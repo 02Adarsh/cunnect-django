@@ -2,6 +2,10 @@ import random
 
 from django.contrib.auth.models import User
 from django.db import models
+from cloudinary_storage.storage import (
+    RawMediaCloudinaryStorage,
+    VideoMediaCloudinaryStorage,
+)
 
 
 class UserProfile(models.Model):
@@ -153,6 +157,7 @@ class Banner(models.Model):
 
     video = models.FileField(
         upload_to="banners/videos/",
+        storage=VideoMediaCloudinaryStorage(),
         blank=True,
         null=True
     )
@@ -249,7 +254,8 @@ class PrintOrder(models.Model):
     )
 
     document = models.FileField(
-        upload_to="print_orders/%Y/%m/"
+        upload_to="print_orders/%Y/%m/",
+        storage=RawMediaCloudinaryStorage()
     )
 
     pages = models.PositiveIntegerField()
@@ -309,3 +315,6 @@ class PrintOrder(models.Model):
     @property
     def file_name(self):
         return self.document.name.split("/")[-1]
+
+
+# CUNNECT_CLOUDINARY_RAW_VIDEO_FIELDS
