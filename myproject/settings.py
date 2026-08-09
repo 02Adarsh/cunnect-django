@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary_storage",
+    "cloudinary",
     "channels",
     "myapp",
     "food",
@@ -200,4 +202,21 @@ if DATABASE_URL:
 
     DATABASES = {
         "default": supabase_database,
+    }
+
+
+# CUNNECT_CLOUDINARY_MEDIA_STORAGE
+# Render Free removes local media files on restart/redeploy. When Cloudinary
+# credentials exist, Django ImageField/media uploads are stored on Cloudinary.
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL", "").strip()
+
+if CLOUDINARY_URL:
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        # Static files remain served through Django/Render, not Cloudinary.
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
     }

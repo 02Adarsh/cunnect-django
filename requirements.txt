@@ -145,3 +145,6 @@ zope.interface==8.5
 
 dj-database-url
 psycopg2-binary
+
+cloudinary
+django-cloudinary-storage
